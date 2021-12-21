@@ -1,10 +1,10 @@
-name: model-push-visCompare
+name: model-push-compare-vis
 on: [push]
 jobs:
   run:
     runs-on: ubuntu-latest
     # optionally use a convenient Ubuntu LTS + DVC + CML image
-    container: docker://dvcorg/cml-py3:latest
+    # container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
       - uses: actions/checkout@v2
       # may need to setup NodeJS & Python3 on e.g. self-hosted
@@ -14,15 +14,19 @@ jobs:
       # - uses: actions/setup-python@v2
       #   with:
       #     python-version: '3.x'
-      - name: cml_test
+      - uses: iterative/setup-cml@v1
+      - name: Train model
+        run: |
+          # Your ML workflow goes here
+          pip install -r requirements.txt
+          python train.py
+      - name: Write CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Your ML workflow goes here
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          python train.py
-      
+          # Post reports as comments in GitHub PRs
+          # cat results.txt >> report.md
+          # cml-send-comment report.md
           echo "## MODEL_METRICS" > report.md
           cat metrixs.txt >> report.md
           
