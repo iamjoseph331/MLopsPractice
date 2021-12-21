@@ -28,7 +28,7 @@ jobs:
           # cat results.txt >> report.md
           # cml-send-comment report.md
           echo "## MODEL_METRICS" > report.md
-          cat metrixs.txt >> report.md
+          cat metrics.txt >> report.md
           
           echo "## DATA Visualization" >> report.md
           cml-publish feature_importance.png --md >> report.md
